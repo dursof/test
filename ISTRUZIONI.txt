@@ -1,0 +1,80 @@
+============================================================
+ ESTRATTORE DDT - Istruzioni d'uso
+============================================================
+
+PREREQUISITI
+------------
+1. Installare Tesseract OCR:
+   https://github.com/UB-Mannheim/tesseract/wiki
+
+   Durante l'installazione:
+   - Scegliere "Additional language data" -> spuntare "Italian"
+   - Installare nel percorso default:
+     C:\Program Files\Tesseract-OCR\
+
+2. Installare Poppler per Windows:
+   https://github.com/oschwartz10612/poppler-windows/releases
+
+   - Scaricare l'ultima release, estrarre in C:\poppler
+   - Aggiungere C:\poppler\Library\bin al PATH di sistema
+     (Pannello di controllo -> Sistema -> Variabili d'ambiente)
+
+BUILD DELL'ESEGUIBILE (solo una volta)
+---------------------------------------
+1. Installare Python 3.8+ da https://www.python.org
+2. Aprire il prompt dei comandi nella cartella del progetto
+3. Eseguire: build_exe.bat
+4. Il file extract_ddt.exe apparirà in: dist\extract_ddt.exe
+
+USO
+---
+Opzione A - Doppio click:
+  Copiare extract_ddt.exe nella cartella con i PDF e fare doppio click.
+  Elaborerà tutti i PDF presenti e creerà ddt_articoli.csv
+
+Opzione B - Da riga di comando:
+  extract_ddt.exe [cartella_pdf] [--csv nome_output.csv] [--reset]
+
+  Esempi:
+    extract_ddt.exe
+      -> elabora PDF nella cartella corrente
+
+    extract_ddt.exe C:\DDT\2024
+      -> elabora PDF in C:\DDT\2024
+
+    extract_ddt.exe C:\DDT\2024 --csv risultati.csv
+      -> salva in risultati.csv
+
+    extract_ddt.exe --reset
+      -> re-elabora tutti i file (ignora quelli già processati)
+
+OUTPUT CSV
+----------
+File: ddt_articoli.csv (separatore: ;)
+Colonne:
+  file_pdf             - nome del file PDF sorgente
+  numero_ddt           - numero del DDT
+  data_ddt             - data uscita merci (GG/MM/AAAA)
+  fornitore            - ragione sociale del fornitore
+  n_ordine_cliente     - numero ordine di acquisto cliente
+  n_ordine_fornitore   - numero ordine fornitore
+  codice_articolo      - codice articolo fornitore
+  codice_articolo_cliente - codice articolo cliente (se presente)
+  descrizione_articolo - descrizione dell'articolo
+  um                   - unità di misura
+  quantita             - quantità
+  hu                   - handling units (pallet/colli)
+
+FILE DI TRACKING
+----------------
+ddt_processed.txt: contiene la lista dei PDF già elaborati.
+Cancellare questo file (o usare --reset) per ri-elaborare tutto.
+
+NOTE
+----
+- I PDF devono essere documenti scansionati (supporta OCR automatico)
+- La qualità dell'estrazione dipende dalla qualità della scansione
+- Campi non rilevati dall'OCR appariranno vuoti nel CSV
+- In caso di articoli non rilevati automaticamente, la riga
+  conterrà il messaggio "ARTICOLI NON RILEVATI - VERIFICARE MANUALMENTE"
+============================================================
